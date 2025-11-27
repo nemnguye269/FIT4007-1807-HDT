@@ -1,5 +1,4 @@
-public class Main {
-    import java.time.LocalDate;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -366,6 +365,6 @@ public class DnuTutorConnect {
 
         System.out.println("\n=== Demo finished ===");
     }
-}
 
 }
+
