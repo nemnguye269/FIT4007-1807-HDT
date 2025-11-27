@@ -1,15 +1,12 @@
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class DnuTutorConnect {
 
-    /* =======================
-       ======================= */
 
-    // Abstract base user
     public static abstract class User {
         protected final UUID id;
         protected String name;
@@ -98,7 +95,6 @@ public class DnuTutorConnect {
         @Override public String toString() { return name; }
     }
 
-    // Simple timeslot representation (start - end)
     public static class TimeSlot {
         private final LocalDateTime start;
         private final LocalDateTime end;
@@ -198,10 +194,6 @@ public class DnuTutorConnect {
         }
     }
 
-    /* =======================
-       Service layer (in-memory)
-       ======================= */
-
     public static class DnuService {
         private final Map<UUID, User> users = new HashMap<>();
         private final Map<UUID, Subject> subjects = new HashMap<>();
@@ -242,7 +234,7 @@ public class DnuTutorConnect {
             return lr;
         }
 
-        // Search tutors by subject and optionally min rating / max fee
+        // Search tutors by subject
         public List<Tutor> searchTutorsBySubject(Subject subject, Double maxFee, Double minRating) {
             return users.values().stream()
                     .filter(u -> u instanceof Tutor)
@@ -307,25 +299,25 @@ public class DnuTutorConnect {
         DnuService service = new DnuService();
 
         // Create subjects
-        Subject math = service.createOrGetSubject("Toán");
-        Subject java = service.createOrGetSubject("Lập trình Java");
-        Subject english = service.createOrGetSubject("Tiếng Anh");
+        Subject math = service.createOrGetSubject("Toan");
+        Subject java = service.createOrGetSubject("Lập trinh Java");
+        Subject english = service.createOrGetSubject("Tieng Anh");
 
         // Register users
-        Student alice = service.registerStudent("Nguyễn Minh A", "alice@dnu.edu.vn", "0901000100");
-        Tutor bob = service.registerTutor("Trần Văn B", "bob@dnu.edu.vn", "0902000200", 150000.0, "Senior student - Kỹ thuật phần mềm");
-        Tutor carol = service.registerTutor("Lê Thị C", "carol@dnu.edu.vn", "0903000300", 100000.0, "Giảng viên thỉnh giảng - TOEIC coach");
+        Student alice = service.registerStudent("Nguyen Minh A", "alice@dnu.edu.vn", "0901000100");
+        Tutor bob = service.registerTutor("Tran Van B", "bob@dnu.edu.vn", "0902000200", 150000.0, "Senior student - Ky thuat phan mem");
+        Tutor carol = service.registerTutor("Le Thi C", "carol@dnu.edu.vn", "0903000300", 100000.0, "Giang vien thinh giang - TOEIC coach");
         Admin admin = service.registerAdmin("Admin DNU", "admin@dnu.edu.vn", "0904000400");
 
         // Tutors add subjects and availability
         bob.addSubject(math); bob.addSubject(java);
         carol.addSubject(english);
 
-        // Bob availability
+        //availability
         bob.addAvailability(LocalDate.now().plusDays(1), new TimeSlot(LocalDateTime.now().plusDays(1).withHour(18).withMinute(0), LocalDateTime.now().plusDays(1).withHour(20).withMinute(0)));
 
         // Student posts a learning request
-        LearningRequest lr1 = service.postLearningRequest(alice, java, "Cần học Java OOP để làm đồ án. Ưu tiên tutor có kinh nghiệm thực tế.");
+        LearningRequest lr1 = service.postLearningRequest(alice, java, "Can hoc Java OOP de lam do an. Uu tien tutor co kinh nghiem thuc te.");
 
         // Search tutors for Java
         List<Tutor> found = service.searchTutorsBySubject(java, null, null);
@@ -339,7 +331,7 @@ public class DnuTutorConnect {
 
         // Student pays (simulate)
         double amount = bob.getFeePerHour() * (booking.durationMinutes / 60.0);
-        Transaction tx = service.createTransaction(booking, amount, "Thanh toán qua ví nội bộ");
+        Transaction tx = service.createTransaction(booking, amount, "Thanh toan qua vi noi bo");
         System.out.println("Transaction created: " + tx);
 
         // Tutor confirms booking
@@ -351,7 +343,7 @@ public class DnuTutorConnect {
         System.out.println("Booking after done: " + booking);
 
         // Student rates tutor
-        Rating rating = service.addRating(alice, bob, 5, "Rất nhiệt tình, giải thích rõ ràng!");
+        Rating rating = service.addRating(alice, bob, 5, "Rat nhiet tinh, giai thich ro rang!");
         System.out.println("New rating: " + rating);
         System.out.println("Tutor average rating now: " + bob.getAverageRating());
 
@@ -365,6 +357,5 @@ public class DnuTutorConnect {
 
         System.out.println("\n=== Demo finished ===");
     }
-
 }
 
